@@ -1,22 +1,61 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: '/backLogin',
+    name: 'backLogin',
+    component: () => import('../components/admin/BackLogin.vue')
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/',
+    name: 'back',
+    component: () => import('../components/admin/Back.vue'),
+    children: [
+      {
+        path: '/myIndex',
+        name: 'myIndex',
+        component: () => import('../components/admin/MyIndex.vue')
+      },
+      {
+        path: '/manageCategory',
+        name: 'manageCategory',
+        component: () => import('../components/admin/ManageCategory.vue')
+      },
+      {
+        path: '/manageShop',
+        name: 'manageShop',
+        component: () => import('../components/admin/ManageShop.vue')
+      }, 
+      {
+        path: '/manageUser',
+        name: 'manageUser',
+        component: () => import('../components/admin/ManageUser.vue')
+      }, 
+      {
+        path: '/manageOrder',
+        name: 'manageOrder',
+        component: () => import('../components/admin/ManageOrder.vue')
+      }, 
+      {
+        path: '/manageComment',
+        name: 'manageComment',
+        component: () => import('../components/admin/ManageComment.vue')
+      },
+      {
+        path: '/myAbout',
+        name: 'myAbout',
+        component: () => import('../components/admin/MyAbout.vue')
+      },
+      {
+        path: '/CategorySales',
+        name: 'CategorySales',
+        component: () => import('../components/admin/CategorySales.vue')
+      }
+      
+    ]
   }
 ]
 

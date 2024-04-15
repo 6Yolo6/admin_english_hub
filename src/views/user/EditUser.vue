@@ -30,6 +30,9 @@
             <el-form-item label="邮箱" prop="email">
                 <el-input v-model="form.email" autocomplete="off"></el-input>
             </el-form-item>
+            <el-form-item label="手机号" prop="telephone">
+                <el-input v-model="form.telephone" autocomplete="off"></el-input>
+            </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="close">取 消</el-button>

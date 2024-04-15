@@ -34,10 +34,9 @@ export function upload(url, params) {
     return new Promise((resolve, reject) => {
         const formData = new FormData();
         formData.append('file', params.file)
-        if (params.petId)
-            formData.append('petId', params.petId)
-        if (params.videoName)
-            formData.append('videoName', params.videoName)
+		if (params.fileType) {
+			formData.append('fileType', params.fileType)
+		}
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -55,7 +54,6 @@ export function upload(url, params) {
             });
     });
 }
-
 
 export function postJson(url, params) {
 	return axios({

@@ -22,7 +22,7 @@
               <span>管理单词</span>
             </el-menu-item>
           </router-link>
-          <router-link to="manageComment">
+          <router-link to="manageEBook">
             <el-menu-item index="">
               <i class="el-icon-data-line"></i>
               <span>管理图书</span>

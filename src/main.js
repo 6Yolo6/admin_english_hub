@@ -43,8 +43,9 @@ axios.interceptors.response.use((success) => {
   // console.log(error.response);
    if (error.response.status == 504 || error.response.status == 404) {
       Toast("服务器被吃了")
-   } else if (error.response.status == 414) {
+   } else if (error.response.status == 401) {
     if (localStorage.getItem('token')) {
+      console.log("error: ", error.response.data.message)
       Toast("token过期，请登录")
       router.replace('/backLogin')
     }

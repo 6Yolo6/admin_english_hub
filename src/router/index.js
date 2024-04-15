@@ -17,8 +17,18 @@ const routes = [
       {
         path: '/manageUser',
         name: 'manageUser',
-        component: () => import('../components/user/ManageUser.vue')
+        component: () => import('../views/user/ManageUser.vue')
       }, 
+      {
+        path: '/manageEBook',
+        name: 'manageEBook',
+        component: () => import('../views/eBook/ManageEBook.vue')
+      },
+      {
+        path: '/manageEBookSeries',
+        name: 'manageEBookSeries',
+        component: () => import('../views/eBookSeries/ManageEBookSeries.vue')
+      },
       {
         path: '/myAbout',
         name: 'myAbout',

@@ -1,10 +1,10 @@
 <template>
-    <el-main class="manageOrder">
+    <el-main class="manageEBook">
         <div>
             <el-form ref="searchForm" :model="searchForm" :inline="true" class="formItem" label-width="80px">
                 <el-col :xl="6" :md="8" :sm="24">
-                    <el-form-item label="用户名" prop="title">
-                        <el-input placeholder="请输入用户名" v-model="searchForm.username" clearable></el-input>
+                    <el-form-item label="书名" prop="title">
+                        <el-input placeholder="请输入书名" v-model="searchForm.username" clearable></el-input>
                     </el-form-item>
                 </el-col>
 
@@ -23,23 +23,26 @@
         </div>
         <pageTable @load-table-data="loadTableData" ref="dataTable" @selection-change="selectionChange" row-key="id">
             <template slot="tb-columns">
-                <el-table-column prop="username" label="用户名" align="center" width="120"></el-table-column>
-                <el-table-column label="头像" align="center" width="100">
+                <el-table-column prop="title" label="书名" align="center" width="150"></el-table-column>
+                <el-table-column prop="author" label="作者" align="center" width="150"></el-table-column>
+                <el-table-column prop="fileType" label="文件类型" align="center" width="80"></el-table-column>
+                <el-table-column prop="filePath" label="查看文件" align="center" width="100">
                     <template slot-scope="{ row }">
-                        <img :src="row.avatar" alt="头像" style="width: 50px; height: 50px;">
+                        <el-button type="text" @click="previewFile(row.filePath)">查看文件</el-button>
                     </template>
                 </el-table-column>
-                <el-table-column prop="sex" label="性别" align="center" width="60"></el-table-column>
-                <el-table-column prop="email" label="邮箱" align="center" width="250"></el-table-column>
-                <el-table-column prop="privilege" label="权限" align="center" width="100">
-                    <template slot-scope="scope">
-                        <div v-if="scope.row.isAdmin == 1">管理员</div>
-                        <div v-else>普通用户</div>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="createTime" label="注册时间" align="center" width="350">
+                <el-table-column prop="seriesName" label="系列" align="center" width="100"></el-table-column>
+                <el-table-column prop="createTime" label="添加时间" align="center" width="200">
                     <template slot-scope="{ row }">
                         {{ row.createTime | formatDate }}
+                        <!-- {{row.createTime}} -->
+                    </template>
+                </el-table-column>
+                <!-- 更新时间 -->
+                <el-table-column prop="updateTime" label="更新时间" align="center" width="200">
+                    <template slot-scope="{ row }">
+                        {{ row.updateTime | formatDate }}
+                        <!-- {{row.createTime}} -->
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作">
@@ -51,23 +54,22 @@
             </template>
         </pageTable>
 
-        <EditUser :title="title" :visible="visible" v-if="visible" :defaultFormData="defaultFormData" @close=close>
-        </EditUser>
+        <EditEBook :title="title" :visible="visible" v-if="visible" :defaultFormData="defaultFormData" @close=close>
+        </EditEBook>
     </el-main>
 </template>
 
 <script>
+import EditEBook from './EditEBook.vue';
+import PageTable from '@/components/PageTable.vue';
 
-import EditUser from "./EditUser"
-import PageTable from '../PageTable'
-
-import {
-    getAll,
-} from '@/api/modules/user.js'
+import { 
+    getAllEBook
+} from '@/api/modules/eBook.js';
 
 export default {
-    name: "manageUser",
-    components: { PageTable, EditUser },
+    name: 'manageEBook',
+    components: { PageTable, EditEBook },
     data() {
         return {
             title: "新增",
@@ -87,6 +89,9 @@ export default {
         }
     },
     methods: {
+        previewFile(filePath) {
+            window.open(filePath, '_blank');
+        },
         search() {
             this.$refs.dataTable.loadTableData('reload')
         },
@@ -122,14 +127,6 @@ export default {
                 type: 'warning'
             }).then(() => {
                 //点击确认的时候 触发
-                // deleteUser({
-                //     ids: ids
-                // }).then(res => {
-                //     //reload
-                //     this.$refs.dataTable.loadTableData('reload')
-                // }).catch(err => {
-                //     console.log(err)
-                // })
             }).catch(() => {
 
                 //点击取消的时候触发         
@@ -144,8 +141,9 @@ export default {
             }
         },
         add() {
-            // this.visible = true
-            // this.defaultFormData = {}
+            this.visible = true
+            this.defaultFormData = {}
+            
         },
         edit(obj) {
             this.visible = true
@@ -154,11 +152,10 @@ export default {
             console.log("编辑", this.defaultFormData);
         },
         loadTableData(filter, callback) {
-            getAll({
+            getAllEBook({
                 pageNum: filter.pageNum,
                 pageSize: filter.pageSize,
             }).then(res => {
-                // console.log("所有用户",res);
                 if (res.statusCode == 200) {
                     let data = {
                         data: res.data.records,
@@ -166,7 +163,7 @@ export default {
                     }
                     callback(data)
                 }
-                else if (res.statusCode == 414) {
+                else if (res.statusCode == 401) {
                     Toast("token过期");
                     this.$router.push('backLogin');
                 }
@@ -175,12 +172,9 @@ export default {
             })
         }
     }
-}
+};
 </script>
 
-
 <style scoped>
-.manageOrder {
-    min-height: 1080px
-}
-</style>
+/* Your component styles here */
+</style></div>
